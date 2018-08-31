@@ -1,0 +1,84 @@
+version: "2"
+services:
+  uam:
+    image: anuraagkamath9/uam:latest
+    container_name: uam
+    environment:
+      JWT_KEY: omegathanos
+      UAM_PORT: 12001
+      EMAIL_ID: <EMAIL_ID_FOR_SENDING_EMAILS> #Replace this 
+      EMAIL_PASSWORD: <EMAIL_PASSWORD_FOR_SENDING_EMAILS> #Replace this 
+      EMAIL_PROVIDER: gmail
+      UAM_MONGODB_URL: mongodb://mongo:27017/uam
+      successfulLoginURL: /index.html  
+      ACTIVATION_URL: http://localhost:12000
+    command: "npm start"
+    links:
+      - node
+      - mongo
+  bpm:
+    image: anuraagkamath9/bpm:latest
+    container_name: bpm
+    environment:
+      JWT_KEY: omegathanos
+      SPM_PORT: 12002
+      EMAIL_ID: <EMAIL_ID_FOR_SENDING_EMAILS> #Replace this 
+      EMAIL_PASSWORD: <EMAIL_PASSWORD_FOR_SENDING_EMAILS> #Replace this 
+      EMAIL_PROVIDER: gmail
+      SPM_MONGODB_URL: mongodb://mongo:27017/bpm
+      PROXY_URL: http://proxy:12000
+      UAM_URL: http://proxy:12001
+    command: "npm start"
+    links:
+      - node
+      - mongo
+  dms:
+    image: anuraagkamath9/dms:latest
+    container_name: dms
+    environment:
+      DMS_PORT: 12003
+      DMS_MONGODB_URL: mongodb://mongo:27017/dms
+    command: "npm start"
+    links:
+      - node
+      - mongo
+  objects:
+    image: anuraagkamath9/objects:latest
+    container_name: objects
+    environment:
+      OBJ_PORT: 12004
+      JWT_KEY: omegathanos
+      OBJ_MONGODB_URL: mongodb://mongo:27017/dms
+    ports:
+      - "12004:12004"
+    command: "npm start"
+    links:
+      - node
+      - mongo
+  proxy:
+    image: anuraagkamath9/proxy:latest
+    container_name: proxy
+    environment:
+      PROXY_PORT: 12000
+      UAM_URL: http://uam:12001
+      BPM_URL: http://bpm:12002
+      DMS_URL: http://dms:12003
+      OBJ_URL: http://objects:12004
+      JWT_KEY: omegathanos
+    expose:
+      - 12000
+    ports:
+      - "12000:12000"
+    command: "npm start"
+    links:
+      - node
+  mongo:
+    container_name: mongodb
+    image: mongo:latest
+    expose:
+      - 27017
+    ports:
+      - "27017:27017"
+  node:
+    container_name: node
+    image: node:latest
