@@ -6,9 +6,9 @@ services:
     environment:
       JWT_KEY: omegathanos
       UAM_PORT: 12001
-      EMAIL_ID: <EMAIL_ID_FOR_SENDING_EMAILS> #Replace this 
-      EMAIL_PASSWORD: <EMAIL_PASSWORD_FOR_SENDING_EMAILS> #Replace this 
-      EMAIL_PROVIDER: gmail
+      EMAIL_ID: <<EMAIL_ID>> #egs alpha@gmail #SERVICE PROVIDER.com
+      EMAIL_PASSWORD: <<EMAIL_PASSWORD>> 
+      EMAIL_PROVIDER: gmail #SERVICE PROVIDER
       UAM_MONGODB_URL: mongodb://mongo:27017/uam
       successfulLoginURL: /index.html  
       ACTIVATION_URL: http://localhost:12000
@@ -22,9 +22,9 @@ services:
     environment:
       JWT_KEY: omegathanos
       SPM_PORT: 12002
-      EMAIL_ID: <EMAIL_ID_FOR_SENDING_EMAILS> #Replace this 
-      EMAIL_PASSWORD: <EMAIL_PASSWORD_FOR_SENDING_EMAILS> #Replace this 
-      EMAIL_PROVIDER: gmail
+      EMAIL_ID: <<EMAIL_ID>> #egs alpha@gmail #SERVICE PROVIDER.com
+      EMAIL_PASSWORD: <<EMAIL_PASSWORD>> 
+      EMAIL_PROVIDER: gmail #SERVICE PROVIDER
       SPM_MONGODB_URL: mongodb://mongo:27017/bpm
       PROXY_URL: http://proxy:12000
       UAM_URL: http://proxy:12001
@@ -49,8 +49,8 @@ services:
       OBJ_PORT: 12004
       JWT_KEY: omegathanos
       OBJ_MONGODB_URL: mongodb://mongo:27017/dms
-    ports:
-      - "12004:12004"
+    # ports:
+    #   - "12004:12004"
     command: "npm start"
     links:
       - node
@@ -65,6 +65,8 @@ services:
       DMS_URL: http://dms:12003
       OBJ_URL: http://objects:12004
       JWT_KEY: omegathanos
+      LOGGER_MONGODB_URL: mongodb://mongo:27017/logger
+      LOGGING_ENABLED: Y
     expose:
       - 12000
     ports:
@@ -72,6 +74,7 @@ services:
     command: "npm start"
     links:
       - node
+      - mongo
   mongo:
     container_name: mongodb
     image: mongo:latest
