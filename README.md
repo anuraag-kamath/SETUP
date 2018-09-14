@@ -5,4 +5,6 @@ iii.fire up docker-compose up from the directory where you have copied the compo
 iv.go to localhost:12000
 
 2.Using pm2:-
-Before running pm2
+Before running pm2-start.sh run env.sh for setting all the environment variables used in the respective projects.
+
+3.Go to https://simple-process-management.herokuapp.com if you want to test the Application on the cloud!
